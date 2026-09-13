@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6c5ce7" />
+  <meta name="description" content="Studcha — مساحة مذاكرة جماعية لإنشاء غرف والدراسة مع الأصدقاء أونلاين." />
+  <title>Studcha — مذاكرة معًا</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-orb orb-one"></div>
+  <div class="bg-orb orb-two"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="Studcha">
+      <span class="brand-mark">S</span>
+      <span>
+        <strong>Studcha</strong>
+        <small>Study together</small>
+      </span>
+    </a>
+    <div class="topbar-actions">
+      <button id="themeToggle" class="icon-btn" type="button" aria-label="تبديل المظهر">☼</button>
+      <button id="helpBtn" class="ghost-btn" type="button">كيف يعمل؟</button>
+    </div>
+  </header>
+
+  <main id="home" class="page-shell">
+    <section class="hero-card">
+      <div class="hero-copy">
+        <span class="eyebrow">✨ مذاكرة جماعية بدون تعقيد</span>
+        <h1>اجلس، ركّز، وادرس <span>مع أصحابك.</span></h1>
+        <p>أنشئ غرفة مذاكرة خلال ثوانٍ، شارك الرابط، وابدأ الدردشة والتعاون في مكان واحد.</p>
+        <div class="hero-actions">
+          <button id="createRoomBtn" class="primary-btn" type="button">+ إنشاء غرفة</button>
+          <button id="joinRoomBtn" class="secondary-btn" type="button">الانضمام إلى غرفة</button>
+        </div>
+        <div class="trust-row">
+          <span>⚡ سريع</span>
+          <span>🔒 غرف خاصة بالكود</span>
+          <span>📱 متوافق مع الهاتف</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="preview-window">
+          <div class="preview-head"><span></span><span></span><span></span><b>Study Room</b></div>
+          <div class="preview-grid">
+            <div class="preview-main">
+              <div class="mini-badge">● LIVE</div>
+              <h3>Biology • Chapter 4</h3>
+              <p>جلسة مذاكرة جماعية</p>
+              <div class="fake-progress"><i></i></div>
+            </div>
+            <div class="preview-members">
+              <span>YA</span><span>AM</span><span>OM</span><span>+3</span>
+            </div>
+          </div>
+          <div class="preview-chat">
+            <div><b>Yasin</b><p>هل نبدأ في السؤال الثالث؟</p></div>
+            <div><b>Ahmed</b><p>نعم، جاهز ✅</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section">
+      <div class="section-heading">
+        <span class="eyebrow">كل ما تحتاجه للمذاكرة</span>
+        <h2>غرفة واحدة، فريق كامل.</h2>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card"><span>💬</span><h3>دردشة الغرفة</h3><p>تحدث مع زملائك داخل الغرفة بدون تشتيت.</p></article>
+        <article class="feature-card"><span>👥</span><h3>أعضاء أونلاين</h3><p>اعرف من يذاكر معك الآن بسهولة.</p></article>
+        <article class="feature-card"><span>⏱️</span><h3>جلسات تركيز</h3><p>مؤقت مذاكرة جماعي مناسب لـ Pomodoro.</p></article>
+        <article class="feature-card"><span>🔗</span><h3>رابط سريع</h3><p>شارك رابط الغرفة أو كودها مع أصدقائك.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <div id="roomModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="roomTitle">
+    <div class="modal-card">
+      <button class="close-btn" data-close="roomModal" type="button" aria-label="إغلاق">×</button>
+      <div class="modal-icon">🚀</div>
+      <h2 id="roomTitle">إنشاء غرفة مذاكرة</h2>
+      <p>اختر اسمًا للغرفة ليعرف الجميع ماذا ستدرسون.</p>
+      <label class="input-label" for="roomName">اسم الغرفة</label>
+      <input id="roomName" class="text-input" maxlength="40" placeholder="مثال: Math — Factors & Multiples" autocomplete="off" />
+      <label class="input-label" for="displayName">اسمك</label>
+      <input id="displayName" class="text-input" maxlength="24" placeholder="مثال: Yasin" autocomplete="name" />
+      <button id="createConfirmBtn" class="primary-btn full" type="button">إنشاء الغرفة</button>
+      <div id="createError" class="form-error" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div id="joinModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="joinTitle">
+    <div class="modal-card">
+      <button class="close-btn" data-close="joinModal" type="button" aria-label="إغلاق">×</button>
+      <div class="modal-icon">🔗</div>
+      <h2 id="joinTitle">الانضمام إلى غرفة</h2>
+      <p>أدخل كود الغرفة الذي أرسله لك صديقك.</p>
+      <label class="input-label" for="roomCode">كود الغرفة</label>
+      <input id="roomCode" class="text-input code-input" maxlength="12" placeholder="مثال: 7K4P2M" autocomplete="off" />
+      <label class="input-label" for="joinName">اسمك</label>
+      <input id="joinName" class="text-input" maxlength="24" placeholder="مثال: Ahmed" autocomplete="name" />
+      <button id="joinConfirmBtn" class="primary-btn full" type="button">دخول الغرفة</button>
+      <div id="joinError" class="form-error" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div id="helpModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="modal-card help-card">
+      <button class="close-btn" data-close="helpModal" type="button" aria-label="إغلاق">×</button>
+      <div class="modal-icon">💡</div>
+      <h2 id="helpTitle">كيف يعمل Studcha؟</h2>
+      <div class="steps">
+        <div><b>01</b><p><strong>أنشئ غرفة</strong><br />اكتب اسم المادة أو الجلسة.</p></div>
+        <div><b>02</b><p><strong>شارك الكود</strong><br />أرسل الكود أو الرابط لزملائك.</p></div>
+        <div><b>03</b><p><strong>ابدأ المذاكرة</strong><br />استخدم الدردشة والمؤقت وادرسوا معًا.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="roomView" class="room-view hidden">
+    <aside class="room-sidebar">
+      <button id="leaveRoomBtn" class="leave-btn" type="button">← مغادرة الغرفة</button>
+      <div class="room-brand-block">
+        <div class="room-avatar" id="roomAvatar">S</div>
+        <div><span class="live-dot"></span> غرفة مباشرة</div>
+      </div>
+      <div class="room-info-block">
+        <span class="muted-label">الغرفة</span>
+        <h2 id="roomNameDisplay">Study Room</h2>
+        <div class="room-code-row"><code id="roomCodeDisplay">------</code><button id="copyCodeBtn" type="button">نسخ</button></div>
+        <button id="shareRoomBtn" class="share-btn" type="button">🔗 مشاركة الغرفة</button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-head"><span>الأعضاء</span><strong id="memberCount">1</strong></div>
+        <div id="membersList" class="members-list"></div>
+      </div>
+      <div class="sidebar-footer"><span id="connectionStatus">● وضع تجريبي</span></div>
+    </aside>
+
+    <section class="chat-panel">
+      <header class="chat-header">
+        <div><span class="status-pill">● Live</span><h1 id="chatTitle">غرفة المذاكرة</h1></div>
+        <div class="chat-tools"><button id="focusTimerBtn" class="tool-btn" type="button">⏱️ <span>المؤقت</span></button></div>
+      </header>
+      <div id="chatMessages" class="chat-messages"></div>
+      <form id="messageForm" class="message-form">
+        <input id="messageInput" maxlength="500" placeholder="اكتب رسالة للمجموعة…" autocomplete="off" />
+        <button type="submit" aria-label="إرسال">➤</button>
+      </form>
+    </section>
+
+    <aside class="study-tools-panel">
+      <div class="tool-card timer-card">
+        <div class="card-kicker">FOCUS SESSION</div>
+        <h3>وقت التركيز</h3>
+        <div id="timerDisplay" class="timer-display">25:00</div>
+        <div class="timer-actions"><button id="timerStartBtn" type="button">ابدأ</button><button id="timerResetBtn" type="button">إعادة</button></div>
+        <div class="timer-hint">25 دقيقة تركيز • 5 دقائق راحة</div>
+      </div>
+      <div class="tool-card note-card">
+        <div class="card-kicker">QUICK NOTES</div>
+        <h3>ملاحظات الجلسة</h3>
+        <textarea id="sessionNotes" placeholder="اكتب أهم الأفكار هنا…"></textarea>
+        <button id="saveNotesBtn" type="button">حفظ محلي</button>
+      </div>
+    </aside>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
