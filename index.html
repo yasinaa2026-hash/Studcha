@@ -1,10 +1,60 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#5b55f7"><title>Chat</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script></head><body>
-<div id="startScreen" class="screen"><div class="start-card"><div class="logo">C</div><h1>مرحبًا بك في Chat</h1><p>أنشئ اسمك وابدأ التواصل مباشرة.</p><label>اسمك</label><input id="displayNameInput" maxlength="30" placeholder="مثال: ياسين"><button id="startBtn" class="primary big">إنشاء حساب والدخول</button><div class="small-note">لا تحتاج إلى مفاتيح أو إعدادات تقنية.</div></div></div>
-<div id="app" class="app hidden"><aside id="sidebar" class="sidebar"><div class="brand-row"><div class="brand"><span class="logo small">C</span><div><b>Chat</b><small>تواصل بسهولة</small></div></div><button id="closeSidebar" class="mobile-btn">×</button></div><div class="profile-box"><div id="myAvatar" class="avatar">؟</div><div class="profile-copy"><b id="myName">—</b><small>حسابك</small></div><button id="copyMyLink" class="ghost">🔗</button></div><button id="newChatBtn" class="primary full">＋ محادثة جديدة</button><button id="createRoomBtn" class="secondary full">🏠 إنشاء غرفة</button><button id="joinRoomBtn" class="secondary full">🔑 دخول إلى غرفة</button><div class="section-title">المحادثات</div><div id="chatList" class="chat-list"><div class="empty-list">لا توجد محادثات بعد.<br>ابدأ محادثة جديدة.</div></div><button id="darkBtn" class="secondary full bottom-btn">🌙 الوضع الداكن</button><button id="logoutBtn" class="logout full">تسجيل الخروج</button></aside>
-<main class="main"><header class="header"><button id="openSidebar" class="mobile-btn">☰</button><div class="active-user"><div id="activeAvatar" class="avatar">C</div><div><b id="activeName">ابدأ محادثة</b><small id="activeStatus">شارك رابطك مع صديق</small></div></div><div class="header-actions"><button id="audioBtn" class="icon-btn">📞</button><button id="videoBtn" class="icon-btn">📹</button></div></header><section id="messages" class="messages"><div id="emptyWelcome" class="welcome"><div class="welcome-icon">💬</div><h2>جاهز للتواصل؟</h2><p>أنشئ محادثة جديدة ثم أرسل الرابط للشخص الذي تريد التحدث معه.</p></div></section><form id="composer" class="composer"><button id="attachBtn" type="button" class="icon-btn">📎</button><input id="fileInput" type="file" hidden><input id="messageInput" maxlength="2000" placeholder="اكتب رسالة..."><button id="emojiBtn" type="button" class="icon-btn">😊</button><button class="send" type="submit">➤</button></form><div id="emojiPanel" class="emoji-panel"></div></main></div>
-<div id="chatModal" class="overlay hidden"><div class="modal"><button class="close" data-close="chatModal">×</button><h2>محادثة جديدة</h2><p>اكتب اسم الشخص فقط، ثم أنشئ رابط المحادثة وأرسله له.</p><label>اسم الشخص</label><input id="friendName" placeholder="مثال: أحمد" maxlength="30"><div class="info-box">صديقك يفتح الرابط على جهازه ويكتب اسمه، ثم يتم الاتصال بينكما مباشرة.</div><button id="makeInvite" class="primary full">إنشاء المحادثة</button></div></div>
-<div id="inviteModal" class="overlay hidden"><div class="modal"><button class="close" data-close="inviteModal">×</button><h2>رابط المحادثة</h2><p>أرسل الرابط للشخص الذي تريد التحدث معه.</p><input id="inviteLink" readonly><button id="copyInvite" class="primary full">نسخ الرابط</button></div></div>
-<div id="roomModal" class="overlay hidden"><div class="room-modal"><button class="close" data-close="roomModal">×</button><div class="room-head"><div class="room-logo">🏠</div><div><h2 id="roomTitle">الغرفة</h2><small id="roomStatus">غرفة جماعية</small></div></div><div id="roomMessages" class="room-messages"></div><form id="roomComposer" class="composer"><input id="roomInput" placeholder="اكتب في الغرفة..."><button class="send">➤</button></form><div class="room-actions"><button id="copyRoom" class="secondary">نسخ رابط</button><button id="leaveRoom" class="danger">مغادرة</button></div></div></div>
-<div id="callModal" class="overlay hidden"><div class="call-window"><div class="call-header"><div><b id="callName">مكالمة</b><small id="callState">جارٍ الاتصال...</small></div><button id="endCallTop" class="close-call">×</button></div><div class="video-area"><div id="callAvatar" class="call-big-avatar">C</div><video id="remoteVideo" autoplay playsinline></video><video id="localVideo" autoplay muted playsinline></video></div><div class="call-buttons"><button id="muteBtn">🎙️</button><button id="cameraToggle">📷</button><button id="endCallBtn" class="end-call">☎</button></div></div></div>
-<div id="incoming" class="incoming hidden"><div class="incoming-icon">📞</div><div class="incoming-copy"><b id="incomingName">مكالمة واردة</b><span id="incomingType">صوتية</span></div><button id="acceptCall" class="accept">قبول</button><button id="rejectCall" class="reject">رفض</button></div><div id="toast" class="toast"></div>
-<script src="script.js"></script><script src="app-ui.js"></script><script src="fix.js"></script><script src="final.js"></script></body></html>
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#5b55f7">
+<title>Chat</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="startScreen" class="screen">
+  <div class="start-card">
+    <div class="logo">C</div>
+    <h1>مرحبًا بك في Chat</h1>
+    <p>أنشئ حسابك وابدأ مباشرة.</p>
+    <label for="displayNameInput">اسمك</label>
+    <input id="displayNameInput" maxlength="30" autocomplete="name" placeholder="مثال: ياسين">
+    <button id="startBtn" class="primary big" type="button">إنشاء حساب والدخول</button>
+    <div id="startError" class="small-note"></div>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+  <aside id="sidebar" class="sidebar">
+    <div class="brand-row">
+      <div class="brand"><span class="logo small">C</span><div><b>Chat</b><small>تواصل بسهولة</small></div></div>
+      <button id="closeSidebar" class="mobile-btn" type="button">×</button>
+    </div>
+    <div class="profile-box">
+      <div id="myAvatar" class="avatar">؟</div>
+      <div class="profile-copy"><b id="myName">—</b><small>حسابك</small></div>
+      <button id="copyMyLink" class="ghost" type="button">🔗</button>
+    </div>
+    <button id="newChatBtn" class="primary full" type="button">＋ محادثة جديدة</button>
+    <button id="createRoomBtn" class="secondary full" type="button">🏠 إنشاء غرفة</button>
+    <button id="joinRoomBtn" class="secondary full" type="button">🔑 دخول إلى غرفة</button>
+    <div class="section-title">المحادثات</div>
+    <div id="chatList" class="chat-list"><div class="empty-list">لا توجد محادثات بعد.</div></div>
+    <button id="darkBtn" class="secondary full bottom-btn" type="button">🌙 الوضع الداكن</button>
+    <button id="logoutBtn" class="logout full" type="button">تسجيل الخروج</button>
+  </aside>
+
+  <main class="main">
+    <header class="header">
+      <button id="openSidebar" class="mobile-btn" type="button">☰</button>
+      <div class="active-user"><div id="activeAvatar" class="avatar">C</div><div><b id="activeName">ابدأ محادثة</b><small id="activeStatus">أنشئ محادثة جديدة</small></div></div>
+      <div class="header-actions"><button id="audioBtn" class="icon-btn" type="button">📞</button><button id="videoBtn" class="icon-btn" type="button">📹</button></div>
+    </header>
+    <section id="messages" class="messages"><div id="emptyWelcome" class="welcome"><div class="welcome-icon">💬</div><h2>جاهز للتواصل؟</h2><p>أنشئ محادثة جديدة أو ادخل إلى غرفة.</p></div></section>
+    <form id="composer" class="composer"><button id="attachBtn" type="button" class="icon-btn">📎</button><input id="fileInput" type="file" hidden><input id="messageInput" maxlength="2000" placeholder="اكتب رسالة..."><button id="emojiBtn" type="button" class="icon-btn">😊</button><button class="send" type="submit">➤</button></form>
+  </main>
+</div>
+
+<div id="chatModal" class="overlay hidden"><div class="modal"><button class="close" data-close="chatModal" type="button">×</button><h2>محادثة جديدة</h2><p>اكتب اسم الشخص الذي تريد التواصل معه.</p><label for="friendName">اسم الشخص</label><input id="friendName" placeholder="مثال: أحمد" maxlength="30"><button id="makeInvite" class="primary full" type="button">إنشاء المحادثة</button></div></div>
+<div id="inviteModal" class="overlay hidden"><div class="modal"><button class="close" data-close="inviteModal" type="button">×</button><h2>رابط الدعوة</h2><p>أرسل هذا الرابط إلى صديقك.</p><input id="inviteLink" readonly><button id="copyInvite" class="primary full" type="button">نسخ الرابط</button></div></div>
+<div id="roomModal" class="overlay hidden"><div class="modal"><button class="close" data-close="roomModal" type="button">×</button><h2 id="roomTitle">غرفة</h2><p id="roomStatus">شارك الرابط مع الآخرين.</p><input id="roomLink" readonly><button id="copyRoom" class="primary full" type="button">نسخ رابط الغرفة</button><button id="leaveRoom" class="danger full" type="button">إغلاق</button></div></div>
+<div id="toast" class="toast"></div>
+<script src="final.js"></script>
+</body>
+</html>
