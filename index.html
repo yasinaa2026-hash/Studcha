@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6c63ff" />
+  <meta name="description" content="Chatly — تطبيق دردشة عصري يعمل مباشرة في المتصفح." />
+  <title>Chatly — دردشة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-row">
+        <div class="brand-mark">C</div>
+        <div>
+          <strong>Chatly</strong>
+          <small>دردش. شارك. تواصل.</small>
+        </div>
+        <button class="icon-btn mobile-only" id="closeSidebar" aria-label="إغلاق">×</button>
+      </div>
+
+      <div class="profile-mini">
+        <div class="avatar me">ي</div>
+        <div class="profile-text"><b id="myName">Yasin</b><span><i></i> متصل الآن</span></div>
+        <button class="icon-btn" id="settingsBtn" aria-label="الإعدادات">⚙</button>
+      </div>
+
+      <button class="new-chat" id="newChatBtn"><span>＋</span> محادثة جديدة</button>
+
+      <label class="search-box" for="chatSearch">
+        <span>⌕</span><input id="chatSearch" type="search" placeholder="ابحث عن محادثة..." autocomplete="off" />
+      </label>
+
+      <div class="chat-list" id="chatList"></div>
+
+      <div class="sidebar-footer">
+        <button class="footer-btn" id="themeBtn"><span>◐</span><span id="themeText">الوضع الداكن</span></button>
+        <div class="version">Chatly v1.0</div>
+      </div>
+    </aside>
+
+    <main class="main-panel">
+      <header class="chat-header">
+        <button class="icon-btn mobile-only" id="openSidebar" aria-label="فتح القائمة">☰</button>
+        <div class="chat-person">
+          <div class="avatar" id="activeAvatar">س</div>
+          <div><h2 id="activeName">سارة</h2><p id="activeStatus">متصلة الآن</p></div>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn" id="callBtn" title="اتصال">☎</button>
+          <button class="icon-btn" id="moreBtn" title="المزيد">•••</button>
+        </div>
+      </header>
+
+      <section class="messages" id="messages">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">💬</div>
+          <h3>ابدأ المحادثة</h3>
+          <p>اختر محادثة من القائمة وأرسل أول رسالة.</p>
+        </div>
+      </section>
+
+      <div class="typing" id="typing"><span></span><span></span><span></span> يكتب الآن...</div>
+
+      <form class="composer" id="composer">
+        <button type="button" class="icon-btn attach" id="attachBtn" title="إرفاق">＋</button>
+        <input id="messageInput" type="text" placeholder="اكتب رسالتك هنا..." maxlength="1000" autocomplete="off" />
+        <button type="button" class="icon-btn emoji-btn" id="emojiBtn" title="إيموجي">☺</button>
+        <button type="submit" class="send-btn" aria-label="إرسال">➤</button>
+      </form>
+      <div class="emoji-panel" id="emojiPanel">
+        <button>😀</button><button>😂</button><button>😍</button><button>🥰</button><button>🔥</button><button>👍</button><button>❤️</button><button>🎉</button><button>😎</button><button>🤝</button><button>✨</button><button>🚀</button>
+      </div>
+      <input type="file" id="fileInput" hidden />
+    </main>
+
+    <aside class="details-panel" id="detailsPanel">
+      <div class="details-cover"></div>
+      <div class="details-content">
+        <div class="avatar profile-avatar" id="detailsAvatar">س</div>
+        <h2 id="detailsName">سارة</h2>
+        <p class="muted" id="detailsHandle">@sara</p>
+        <div class="online-pill">● متصلة الآن</div>
+        <div class="info-card"><span>النبذة</span><p id="detailsBio">أحب التصميم، البرمجة والقهوة ☕</p></div>
+        <div class="quick-actions">
+          <button id="muteBtn">🔕 كتم</button><button id="searchMessagesBtn">⌕ بحث</button>
+        </div>
+        <div class="info-card"><span>الملفات والوسائط</span><div class="media-grid"><div>🖼️<small>صور</small></div><div>🎞️<small>فيديو</small></div><div>📎<small>ملفات</small></div></div></div>
+        <button class="danger-btn" id="clearChatBtn">حذف رسائل المحادثة</button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="modal hidden" id="newChatModal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <button class="close-modal" data-close="newChatModal">×</button>
+      <div class="modal-icon">👤</div><h3>محادثة جديدة</h3><p>أدخل اسم الشخص لبدء محادثة.</p>
+      <input id="newChatName" class="modal-input" placeholder="مثال: أحمد" maxlength="30" />
+      <input id="newChatBio" class="modal-input" placeholder="نبذة قصيرة (اختياري)" maxlength="70" />
+      <button class="modal-primary" id="createChatBtn">بدء المحادثة</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>
