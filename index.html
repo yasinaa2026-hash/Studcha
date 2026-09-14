@@ -1,78 +1,65 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#635bff" />
-  <meta name="description" content="Chat — دردشة حقيقية برسائل فورية وصور ومكالمات صوتية وفيديو." />
-  <title>Chat — دردشة</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#635bff">
+<title>Chat — دردشة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 </head>
 <body>
-  <div id="setupScreen" class="center-screen">
-    <div class="setup-card glass">
-      <div class="brand large"><span class="brand-mark">C</span><span><b>Chat</b><small>تواصل حقيقي</small></span></div>
-      <h1>إعداد الاتصال</h1>
-      <p>ضع رابط مشروع Supabase وPublic Anon Key مرة واحدة ليصبح التطبيق متصلًا بالحسابات والرسائل.</p>
-      <label>Supabase URL<input id="supabaseUrl" placeholder="https://xxxx.supabase.co"></label>
-      <label>Anon Key<input id="supabaseKey" placeholder="eyJ..." autocomplete="off"></label>
-      <button id="saveConfig" class="primary">تشغيل التطبيق</button>
-      <p class="hint">استخدم Public Anon Key فقط، وليس Service Role Key.</p>
-    </div>
+<section id="authScreen" class="center-screen">
+  <div class="auth-card glass">
+    <div class="brand large"><span class="brand-mark">C</span><span><b>Chat</b><small>تواصل مع من تريد</small></span></div>
+    <div id="authWelcome" class="auth-welcome"><h1>مرحبًا بك 👋</h1><p>أنشئ حسابك وابدأ الدردشة مباشرة.</p></div>
+    <div class="auth-tabs"><button class="active" data-auth="signup">إنشاء حساب</button><button data-auth="login">دخول</button></div>
+    <form id="signupForm" class="auth-form">
+      <label>اسمك<input id="signupName" maxlength="30" required placeholder="مثال: ياسين"></label>
+      <label>اسم المستخدم<input id="signupUsername" maxlength="20" pattern="[a-zA-Z0-9_]+" required placeholder="yasin123"></label>
+      <label>البريد الإلكتروني<input id="signupEmail" type="email" required placeholder="name@example.com"></label>
+      <label>كلمة المرور<input id="signupPassword" type="password" minlength="6" required placeholder="••••••••"></label>
+      <button class="primary full" type="submit">إنشاء حساب ومتابعة</button>
+    </form>
+    <form id="loginForm" class="auth-form hidden">
+      <label>البريد الإلكتروني<input id="loginEmail" type="email" required></label>
+      <label>كلمة المرور<input id="loginPassword" type="password" required></label>
+      <button class="primary full" type="submit">دخول</button>
+    </form>
+    <div id="authMessage" class="auth-message"></div>
   </div>
+</section>
 
-  <div id="authScreen" class="center-screen hidden">
-    <div class="auth-card glass">
-      <div class="brand large"><span class="brand-mark">C</span><span><b>Chat</b><small>دردشة حقيقية</small></span></div>
-      <div class="auth-tabs"><button class="active" data-auth="login">دخول</button><button data-auth="signup">إنشاء حساب</button></div>
-      <form id="loginForm" class="auth-form">
-        <label>البريد الإلكتروني<input type="email" id="loginEmail" required autocomplete="email"></label>
-        <label>كلمة المرور<input type="password" id="loginPassword" required autocomplete="current-password"></label>
-        <button class="primary" type="submit">دخول</button>
-      </form>
-      <form id="signupForm" class="auth-form hidden">
-        <label>اسم العرض<input id="signupName" maxlength="30" required placeholder="مثال: ياسين"></label>
-        <label>اسم المستخدم<input id="signupUsername" maxlength="20" pattern="[a-zA-Z0-9_]+" required placeholder="yasin_dev"></label>
-        <label>البريد الإلكتروني<input type="email" id="signupEmail" required autocomplete="email"></label>
-        <label>كلمة المرور<input type="password" id="signupPassword" minlength="6" required autocomplete="new-password"></label>
-        <button class="primary" type="submit">إنشاء الحساب</button>
-      </form>
-      <div id="authMessage" class="auth-message"></div>
-    </div>
-  </div>
+<div id="app" class="app hidden">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand-row"><div class="brand"><span class="brand-mark">C</span><span><b>Chat</b><small>دردشة</small></span></div><button id="closeSidebar" class="icon-btn mobile-only">×</button></div>
+    <div class="my-profile"><div id="myAvatar" class="avatar">؟</div><div><b id="myName">—</b><small id="myUsername">@—</small></div><button id="signOutBtn" class="icon-btn" title="خروج">↪</button></div>
+    <button id="newChatBtn" class="primary full">＋ محادثة جديدة</button>
+    <button id="roomsBtn" class="secondary full">🏠 الغرف</button>
+    <label class="search"><span>⌕</span><input id="chatSearch" placeholder="ابحث..." autocomplete="off"></label>
+    <div id="chatList" class="chat-list"></div>
+  </aside>
+  <main class="chat-main">
+    <header class="chat-header">
+      <button id="openSidebar" class="icon-btn mobile-only">☰</button>
+      <div class="chat-title-wrap"><div id="activeAvatar" class="avatar">C</div><div><h2 id="activeName">ابدأ محادثة</h2><small id="activeStatus">اختر شخصًا من القائمة</small></div></div>
+      <div class="header-actions"><button id="audioCallBtn" class="icon-btn" title="مكالمة صوتية">☎</button><button id="videoCallBtn" class="icon-btn" title="مكالمة فيديو">▣</button></div>
+    </header>
+    <section id="messages" class="messages"><div id="welcome" class="welcome"><div>💬</div><h3>ابدأ الآن</h3><p>أنشئ محادثة جديدة أو ادخل إلى غرفة وابدأ التواصل.</p></div></section>
+    <form id="composer" class="composer"><button type="button" id="fileBtn" class="icon-btn">＋</button><input id="fileInput" type="file" hidden accept="image/*,video/*,.pdf,.txt,.doc,.docx,.zip"><input id="messageInput" maxlength="2000" placeholder="اكتب رسالة..."><button type="button" id="emojiBtn" class="icon-btn">☺</button><button type="submit" class="send">➤</button></form>
+    <div id="emojiPanel" class="emoji-panel"><button>😀</button><button>😂</button><button>😍</button><button>👍</button><button>❤️</button><button>🔥</button><button>🎉</button><button>✨</button><button>🤝</button><button>😎</button></div>
+  </main>
+</div>
 
-  <div id="app" class="app hidden">
-    <aside class="sidebar" id="sidebar">
-      <div class="brand-row"><div class="brand"><span class="brand-mark">C</span><span><b>Chat</b><small>دردشة حقيقية</small></span></div><button id="closeSidebar" class="icon-btn mobile-only">×</button></div>
-      <div class="my-profile"><div id="myAvatar" class="avatar">ي</div><div><b id="myName">Yasin</b><small id="myUsername">@yasin</small></div><button id="signOutBtn" class="icon-btn" title="خروج">↪</button></div>
-      <button id="newChatBtn" class="primary full">＋ محادثة جديدة</button>
-      <label class="search"><span>⌕</span><input id="chatSearch" placeholder="ابحث في محادثاتك..." autocomplete="off"></label>
-      <div id="chatList" class="chat-list"></div>
-    </aside>
-
-    <main class="chat-main">
-      <header class="chat-header">
-        <button id="openSidebar" class="icon-btn mobile-only">☰</button>
-        <div class="chat-title-wrap"><div id="activeAvatar" class="avatar">C</div><div><h2 id="activeName">اختر محادثة</h2><small id="activeStatus">—</small></div></div>
-        <div class="header-actions"><button id="audioCallBtn" class="icon-btn" title="مكالمة صوتية">☎</button><button id="videoCallBtn" class="icon-btn" title="مكالمة فيديو">▣</button><button id="detailsBtn" class="icon-btn" title="المعلومات">ⓘ</button></div>
-      </header>
-      <section id="messages" class="messages"><div id="welcome" class="welcome"><div>💬</div><h3>مرحبًا بك في Chat</h3><p>أنشئ محادثة وشارك رابط اسم المستخدم مع زميلك لبدء التواصل.</p></div></section>
-      <form id="composer" class="composer"><button type="button" id="fileBtn" class="icon-btn">＋</button><input id="fileInput" type="file" hidden accept="image/*,video/*,.pdf,.txt,.doc,.docx,.zip"><input id="messageInput" maxlength="2000" placeholder="اكتب رسالة..." autocomplete="off"><button type="button" id="emojiBtn" class="icon-btn">☺</button><button type="submit" class="send">➤</button></form>
-      <div id="emojiPanel" class="emoji-panel"><button>😀</button><button>😂</button><button>😍</button><button>🥰</button><button>👍</button><button>❤️</button><button>🔥</button><button>🎉</button><button>✨</button><button>🚀</button><button>🤝</button><button>😎</button></div>
-    </main>
-
-    <aside class="details" id="details"><div class="cover"></div><div class="details-inner"><div id="detailsAvatar" class="avatar big">C</div><h2 id="detailsName">المحادثة</h2><p id="detailsUsername">@username</p><div class="share-box"><span>رابط حسابك</span><code id="myShareLink">—</code><button id="copyShareBtn" class="secondary">نسخ</button></div><div class="detail-actions"><button id="copyUsernameBtn">نسخ المعرف</button><button id="blockBtn">حظر</button></div></div></aside>
-  </div>
-
-  <div id="newChatModal" class="modal hidden"><div class="modal-card"><button class="close-modal" data-close="newChatModal">×</button><h3>محادثة مع شخص</h3><p>ابحث باسم المستخدم، أو شارك رابط حسابك مع زميلك.</p><input id="userLookup" placeholder="@username أو username"><button id="lookupBtn" class="primary full">بحث</button><div id="lookupResults" class="lookup-results"></div></div></div>
-
-  <div id="callModal" class="modal hidden"><div class="call-card"><div class="call-head"><div><h2 id="callTitle">المكالمة</h2><p id="callState">جاري الاتصال...</p></div><button id="endCallTop" class="danger-circle">×</button></div><div class="video-stage"><video id="remoteVideo" autoplay playsinline></video><video id="localVideo" autoplay playsinline muted></video><div id="callAvatar" class="call-avatar">C</div></div><div class="call-controls"><button id="muteCall" class="call-btn">🎙️</button><button id="cameraCall" class="call-btn">📷</button><button id="endCall" class="call-btn end">☎</button></div></div></div>
-  <div id="incomingCall" class="incoming hidden"><div><b id="incomingCaller">مكالمة واردة</b><span id="incomingType">مكالمة فيديو</span></div><div><button id="acceptCall" class="accept">رد</button><button id="rejectCall" class="reject">رفض</button></div></div>
-  <div id="toast" class="toast"></div>
-  <script src="script.js"></script>
+<div id="newChatModal" class="modal hidden"><div class="modal-card"><button class="close-modal" data-close="newChatModal">×</button><h3>من تريد التواصل معه؟</h3><p>اكتب اسم المستخدم فقط.</p><input id="userLookup" placeholder="اسم المستخدم"><button id="lookupBtn" class="primary full">بحث</button><div id="lookupResults" class="lookup-results"></div></div></div>
+<div id="roomsModal" class="modal hidden"><div class="rooms-box"><div class="rooms-head"><div><h2>الغرف</h2><p>أنشئ غرفة أو ادخل غرفة برمز.</p></div><button id="closeRooms" class="icon-btn">×</button></div><div class="rooms-grid"><aside class="rooms-nav"><button id="newRoom" class="primary full">＋ إنشاء غرفة</button><button id="enterRoom" class="secondary full">🔑 دخول برمز</button><div id="roomsList"></div></aside><main class="room-main"><div id="roomTools" class="room-tools"></div><div id="roomMessages" class="room-messages"></div><form id="roomCompose" class="composer"><input id="roomInput" placeholder="اكتب رسالة للغرفة..."><button class="send">➤</button></form></main></div></div></div>
+<div id="callModal" class="modal hidden"><div class="call-card"><div class="call-head"><div><h2 id="callTitle">المكالمة</h2><p id="callState">جارٍ الاتصال...</p></div><button id="endCallTop" class="danger-circle">×</button></div><div class="video-stage"><video id="remoteVideo" autoplay playsinline></video><video id="localVideo" autoplay playsinline muted></video><div id="callAvatar" class="call-avatar">C</div></div><div class="call-controls"><button id="muteCall" class="call-btn">🎙️</button><button id="cameraCall" class="call-btn">📷</button><button id="endCall" class="call-btn end">☎</button></div></div></div>
+<div id="incomingCall" class="incoming hidden"><div><b id="incomingCaller">مكالمة واردة</b><span id="incomingType">مكالمة صوتية</span></div><div><button id="acceptCall" class="accept">قبول</button><button id="rejectCall" class="reject">رفض</button></div></div>
+<div id="toast" class="toast"></div>
+<script src="script.js"></script>
 </body>
 </html>
