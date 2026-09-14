@@ -2,66 +2,129 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#635bff">
-<title>Chat — دردشة</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#5b55f7">
+<title>Chat</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 </head>
 <body>
-<section id="authScreen" class="center-screen">
-  <div class="auth-card glass">
-    <div class="brand large"><span class="brand-mark">C</span><span><b>Chat</b><small>تواصل مع من تريد</small></span></div>
-    <div class="auth-welcome"><h1>مرحبًا بك 👋</h1><p>أنشئ حسابك وابدأ الدردشة مباشرة.</p></div>
-    <div class="auth-tabs"><button class="active" data-auth="signup">إنشاء حساب</button><button data-auth="login">دخول</button></div>
-    <form id="signupForm" class="auth-form">
-      <label>اسمك<input id="signupName" maxlength="30" required placeholder="مثال: ياسين"></label>
-      <label>اسم المستخدم<input id="signupUsername" maxlength="20" pattern="[a-zA-Z0-9_]+" required placeholder="yasin123"></label>
-      <label>البريد الإلكتروني<input id="signupEmail" type="email" required placeholder="name@example.com"></label>
-      <label>كلمة المرور<input id="signupPassword" type="password" minlength="6" required placeholder="••••••••"></label>
-      <button class="primary full" type="submit">إنشاء حساب ومتابعة</button>
-    </form>
-    <form id="loginForm" class="auth-form hidden">
-      <label>البريد الإلكتروني<input id="loginEmail" type="email" required></label>
-      <label>كلمة المرور<input id="loginPassword" type="password" required></label>
-      <button class="primary full" type="submit">دخول</button>
-    </form>
-    <div id="authMessage" class="auth-message"></div>
+<div id="startScreen" class="screen">
+  <div class="start-card">
+    <div class="logo">C</div>
+    <h1>مرحبًا بك في Chat</h1>
+    <p>أنشئ اسمك وابدأ التواصل مباشرة.</p>
+    <label>اسمك</label>
+    <input id="displayNameInput" maxlength="30" placeholder="مثال: ياسين" autocomplete="name">
+    <button id="startBtn" class="primary big">إنشاء حساب والدخول</button>
+    <div class="small-note">لا تحتاج إلى إدخال مفاتيح أو إعدادات تقنية.</div>
   </div>
-</section>
+</div>
 
 <div id="app" class="app hidden">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand-row"><div class="brand"><span class="brand-mark">C</span><span><b>Chat</b><small>دردشة</small></span></div><button id="closeSidebar" class="icon-btn mobile-only">×</button></div>
-    <div class="my-profile"><div id="myAvatar" class="avatar">؟</div><div><b id="myName">—</b><small id="myUsername">@—</small></div><button id="signOutBtn" class="icon-btn" title="خروج">↪</button></div>
+  <aside id="sidebar" class="sidebar">
+    <div class="brand-row">
+      <div class="brand"><span class="logo small">C</span><div><b>Chat</b><small>تواصل بسهولة</small></div></div>
+      <button id="closeSidebar" class="mobile-btn">×</button>
+    </div>
+    <div class="profile-box">
+      <div id="myAvatar" class="avatar">؟</div>
+      <div class="profile-copy"><b id="myName">—</b><small>حسابك</small></div>
+      <button id="copyMyLink" class="ghost" title="نسخ رابطك">🔗</button>
+    </div>
     <button id="newChatBtn" class="primary full">＋ محادثة جديدة</button>
-    <button id="roomsBtn" class="secondary full">🏠 الغرف</button>
-    <label class="search"><span>⌕</span><input id="chatSearch" placeholder="ابحث..." autocomplete="off"></label>
-    <div id="chatList" class="chat-list"></div>
+    <button id="createRoomBtn" class="secondary full">🏠 إنشاء غرفة</button>
+    <button id="joinRoomBtn" class="secondary full">🔑 دخول إلى غرفة</button>
+    <div class="section-title">المحادثات</div>
+    <div id="chatList" class="chat-list">
+      <div class="empty-list">لا توجد محادثات بعد.<br>ابدأ محادثة جديدة.</div>
+    </div>
+    <button id="darkBtn" class="secondary full bottom-btn">🌙 الوضع الداكن</button>
+    <button id="logoutBtn" class="logout full">تسجيل الخروج</button>
   </aside>
-  <main class="chat-main">
-    <header class="chat-header">
-      <button id="openSidebar" class="icon-btn mobile-only">☰</button>
-      <div class="chat-title-wrap"><div id="activeAvatar" class="avatar">C</div><div><h2 id="activeName">ابدأ محادثة</h2><small id="activeStatus">اختر شخصًا من القائمة</small></div></div>
-      <div class="header-actions"><button id="audioCallBtn" class="icon-btn" title="مكالمة صوتية">☎</button><button id="videoCallBtn" class="icon-btn" title="مكالمة فيديو">▣</button></div>
+
+  <main class="main">
+    <header class="header">
+      <button id="openSidebar" class="mobile-btn">☰</button>
+      <div class="active-user">
+        <div id="activeAvatar" class="avatar">C</div>
+        <div><b id="activeName">ابدأ محادثة</b><small id="activeStatus">شارك رابطك مع صديق للاتصال</small></div>
+      </div>
+      <div class="header-actions">
+        <button id="audioBtn" class="icon-btn" title="مكالمة صوتية">📞</button>
+        <button id="videoBtn" class="icon-btn" title="مكالمة فيديو">📹</button>
+      </div>
     </header>
-    <section id="messages" class="messages"><div id="welcome" class="welcome"><div>💬</div><h3>ابدأ الآن</h3><p>أنشئ محادثة جديدة أو ادخل إلى غرفة وابدأ التواصل.</p></div></section>
-    <form id="composer" class="composer"><button type="button" id="fileBtn" class="icon-btn">＋</button><input id="fileInput" type="file" hidden accept="image/*,video/*,.pdf,.txt,.doc,.docx,.zip"><input id="messageInput" maxlength="2000" placeholder="اكتب رسالة..."><button type="button" id="emojiBtn" class="icon-btn">☺</button><button type="submit" class="send">➤</button></form>
-    <div id="emojiPanel" class="emoji-panel"><button>😀</button><button>😂</button><button>😍</button><button>👍</button><button>❤️</button><button>🔥</button><button>🎉</button><button>✨</button><button>🤝</button><button>😎</button></div>
+
+    <section id="messages" class="messages">
+      <div id="emptyWelcome" class="welcome">
+        <div class="welcome-icon">💬</div>
+        <h2>جاهز للتواصل؟</h2>
+        <p>أنشئ محادثة جديدة أو شارك رابط حسابك مع الشخص الذي تريد التحدث معه.</p>
+      </div>
+    </section>
+
+    <div id="typing" class="typing hidden">يكتب الآن...</div>
+    <form id="composer" class="composer">
+      <button id="attachBtn" type="button" class="icon-btn">📎</button>
+      <input id="fileInput" type="file" hidden accept="image/*,video/*,audio/*,.pdf,.txt,.zip,.doc,.docx">
+      <input id="messageInput" maxlength="2000" placeholder="اكتب رسالة..." autocomplete="off">
+      <button id="emojiBtn" type="button" class="icon-btn">😊</button>
+      <button class="send" type="submit">➤</button>
+    </form>
+    <div id="emojiPanel" class="emoji-panel"></div>
   </main>
 </div>
 
-<div id="newChatModal" class="modal hidden"><div class="modal-card"><button class="close-modal" data-close="newChatModal">×</button><h3>من تريد التواصل معه؟</h3><p>اكتب اسم المستخدم فقط.</p><input id="userLookup" placeholder="اسم المستخدم"><button id="lookupBtn" class="primary full">بحث</button><div id="lookupResults" class="lookup-results"></div></div></div>
-<div id="roomsModal" class="modal hidden"><div class="rooms-box"><div class="rooms-head"><div><h2>الغرف</h2><p>أنشئ غرفة أو ادخل غرفة برمز.</p></div><button id="closeRooms" class="icon-btn">×</button></div><div class="rooms-grid"><aside class="rooms-nav"><button id="newRoom" class="primary full">＋ إنشاء غرفة</button><button id="enterRoom" class="secondary full">🔑 دخول برمز</button><div id="roomsList"></div></aside><main class="room-main"><div id="roomTools" class="room-tools"></div><div id="roomMessages" class="room-messages"></div><form id="roomCompose" class="composer"><input id="roomInput" placeholder="اكتب رسالة للغرفة..."><button class="send">➤</button></form></main></div></div></div>
-<div id="callModal" class="modal hidden"><div class="call-card"><div class="call-head"><div><h2 id="callTitle">المكالمة</h2><p id="callState">جارٍ الاتصال...</p></div><button id="endCallTop" class="danger-circle">×</button></div><div class="video-stage"><video id="remoteVideo" autoplay playsinline></video><video id="localVideo" autoplay playsinline muted></video><div id="callAvatar" class="call-avatar">C</div></div><div class="call-controls"><button id="muteCall" class="call-btn">🎙️</button><button id="cameraCall" class="call-btn">📷</button><button id="endCall" class="call-btn end">☎</button></div></div></div>
-<div id="incomingCall" class="incoming hidden"><div><b id="incomingCaller">مكالمة واردة</b><span id="incomingType">مكالمة صوتية</span></div><div><button id="acceptCall" class="accept">قبول</button><button id="rejectCall" class="reject">رفض</button></div></div>
-<div id="compat" aria-hidden="true" style="display:none"><span id="myShareLink"></span><span id="detailsName"></span><span id="detailsUsername"></span><span id="detailsAvatar"></span><span id="copyShareBtn"></span><span id="copyUsernameBtn"></span></div>
+<div id="chatModal" class="overlay hidden">
+  <div class="modal">
+    <button class="close" data-close="chatModal">×</button>
+    <h2>محادثة جديدة</h2>
+    <p>اكتب اسم الشخص ثم شارك معه رابط الاتصال ليتم الربط بين الجهازين.</p>
+    <label>اسم الشخص</label>
+    <input id="friendName" placeholder="مثال: أحمد" maxlength="30">
+    <div class="info-box">بعد الإنشاء سيظهر لك رابط خاص. أرسله لصديقك، وعندما يفتحه سيُربط بك مباشرة.</div>
+    <button id="makeInvite" class="primary full">إنشاء المحادثة</button>
+  </div>
+</div>
+
+<div id="inviteModal" class="overlay hidden">
+  <div class="modal">
+    <button class="close" data-close="inviteModal">×</button>
+    <h2>رابط المحادثة</h2>
+    <p>أرسل هذا الرابط للشخص الذي تريد التحدث معه.</p>
+    <input id="inviteLink" readonly>
+    <button id="copyInvite" class="primary full">نسخ الرابط</button>
+  </div>
+</div>
+
+<div id="roomModal" class="overlay hidden">
+  <div class="room-modal">
+    <button class="close" data-close="roomModal">×</button>
+    <div class="room-head"><div class="room-logo">🏠</div><div><h2 id="roomTitle">الغرفة</h2><small id="roomStatus">غرفة جماعية</small></div></div>
+    <div id="roomMessages" class="room-messages"></div>
+    <form id="roomComposer" class="composer room-composer"><input id="roomInput" placeholder="اكتب في الغرفة..."><button class="send">➤</button></form>
+    <div class="room-actions"><button id="copyRoom" class="secondary">نسخ رابط الغرفة</button><button id="leaveRoom" class="danger">مغادرة</button></div>
+  </div>
+</div>
+
+<div id="callModal" class="overlay hidden">
+  <div class="call-window">
+    <div class="call-header"><div><b id="callName">مكالمة</b><small id="callState">جارٍ الاتصال...</small></div><button id="endCallTop" class="close-call">×</button></div>
+    <div class="video-area"><div id="callAvatar" class="call-big-avatar">C</div><video id="remoteVideo" autoplay playsinline></video><video id="localVideo" autoplay muted playsinline></video></div>
+    <div class="call-buttons"><button id="muteBtn">🎙️</button><button id="cameraToggle">📷</button><button id="endCallBtn" class="end-call">☎</button></div>
+  </div>
+</div>
+
+<div id="incoming" class="incoming hidden">
+  <div class="incoming-icon">📞</div><div class="incoming-copy"><b id="incomingName">مكالمة واردة</b><span id="incomingType">صوتية</span></div>
+  <button id="acceptCall" class="accept">قبول</button><button id="rejectCall" class="reject">رفض</button>
+</div>
+
 <div id="toast" class="toast"></div>
 <script src="script.js"></script>
-<script src="app-ui.js"></script>
 </body>
 </html>
