@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6c5ce7" />
+  <meta name="description" content="Chat — غرف دردشة فورية بدون تسجيل." />
+  <title>Chat — دردشة بدون تسجيل</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg bg-a"></div><div class="bg bg-b"></div>
+
+  <header class="topbar">
+    <a class="brand" href="./"><span class="brand-mark">C</span><span><b>Chat</b><small>بدون تسجيل</small></span></a>
+    <button id="themeBtn" class="icon-btn" type="button" title="تبديل الوضع">☼</button>
+  </header>
+
+  <main id="home" class="home">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">⚡ سريع • 🔒 بدون حساب • 🔗 رابط مشاركة</span>
+        <h1>ابدأ دردشة مع أي شخص، <span>برقم واحد.</span></h1>
+        <p>أنشئ غرفة، خذ الكود، أرسله لصديقك، ويدخل مباشرة من نفس الرابط. لا يوجد تسجيل أو كلمة مرور.</p>
+        <div class="actions">
+          <button id="createBtn" class="primary" type="button">＋ إنشاء غرفة</button>
+          <button id="joinBtn" class="secondary" type="button">الانضمام إلى غرفة</button>
+        </div>
+        <div class="mini-points"><span>✓ اسم مستعار</span><span>✓ رابط مباشر</span><span>✓ رسائل فورية</span></div>
+      </div>
+      <div class="hero-card">
+        <div class="mock-top"><span></span><span></span><span></span><b>Chat Room</b></div>
+        <div class="mock-code"><small>رقم الغرفة</small><strong>8K4M2Q7P</strong><button type="button" disabled>نسخ</button></div>
+        <div class="mock-chat"><div><b>Yasin</b><p>أهلًا 👋 جاهزين؟</p></div><div class="mine"><b>Ahmed</b><p>نعم، دخلت بالرابط ✅</p></div></div>
+      </div>
+    </section>
+
+    <section class="how">
+      <span class="eyebrow">كيف تعمل؟</span>
+      <h2>ثلاث خطوات فقط</h2>
+      <div class="steps">
+        <article><b>01</b><h3>أنشئ الغرفة</h3><p>اكتب اسم الغرفة واسمك.</p></article>
+        <article><b>02</b><h3>شارك الكود</h3><p>أرسل الرقم أو رابط الدعوة.</p></article>
+        <article><b>03</b><h3>ابدأ الدردشة</h3><p>الرسائل تظهر مباشرة للجميع.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <section id="room" class="room hidden" aria-label="غرفة الدردشة">
+    <aside class="sidebar">
+      <button id="leaveBtn" class="leave" type="button">← مغادرة</button>
+      <div class="room-brand"><div id="avatar" class="avatar">C</div><span>● غرفة مباشرة</span></div>
+      <div class="room-info"><small>اسم الغرفة</small><h2 id="roomName">-</h2><div class="code-row"><code id="roomCode">--------</code><button id="copyBtn" type="button">نسخ</button></div><button id="shareBtn" class="share" type="button">🔗 مشاركة الرابط</button></div>
+      <div class="members-head"><span>الأعضاء</span><b id="memberCount">0</b></div>
+      <div id="members" class="members"></div>
+      <div id="status" class="status">● غير متصل</div>
+    </aside>
+
+    <section class="chat">
+      <header class="chat-head"><div><span class="live">● Live</span><h1 id="chatTitle">الغرفة</h1></div><div class="room-actions"><button type="button" disabled title="المكالمات تحتاج خادم إشارة إضافي">🎙️</button><button type="button" disabled title="المكالمات تحتاج خادم إشارة إضافي">🎥</button></div></header>
+      <div id="messages" class="messages"></div>
+      <form id="messageForm" class="composer"><input id="messageInput" maxlength="2000" autocomplete="off" placeholder="اكتب رسالتك…"><button type="submit" aria-label="إرسال">➤</button></form>
+    </section>
+  </section>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <button id="closeModal" class="close" type="button">×</button>
+      <div id="modalIcon" class="modal-icon">＋</div>
+      <h2 id="modalTitle">إنشاء غرفة</h2><p id="modalText">اكتب البيانات ثم ابدأ.</p>
+      <label for="roomNameInput">اسم الغرفة</label><input id="roomNameInput" maxlength="60" placeholder="مثال: فريق الأصدقاء">
+      <label for="displayNameInput">اسمك</label><input id="displayNameInput" maxlength="30" placeholder="مثال: Yasin">
+      <div id="joinOnly" class="hidden"><label for="codeInput">رقم الغرفة</label><input id="codeInput" maxlength="8" class="ltr" placeholder="8K4M2Q7P"></div>
+      <button id="confirmBtn" class="primary full" type="button">متابعة</button>
+      <div id="error" class="error"></div>
+    </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
